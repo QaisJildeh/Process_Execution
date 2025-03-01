@@ -34,4 +34,9 @@ public class Task {
     public int getPriority(){
         return priority;
     }
+
+    @Override
+    public String toString(){
+        return "Task " + id + ": {" + creationTime + ", " + executionTime + ", " + priority + "}";
+    }
 }

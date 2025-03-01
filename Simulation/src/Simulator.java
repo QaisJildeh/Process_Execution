@@ -1,36 +1,20 @@
 import java.io.File;
+import java.util.ArrayList;
+import java.util.List;
 import java.util.Scanner;
 
 public class Simulator {
     private static Simulator simulatorInstance;
+    private static String filePath = "C:\\Users\\jilde\\Desktop\\Atypon\\Tasks\\Process_Execution_Task\\Process_Execution\\input.txt";
+    private static List<Task> tasks;
+    private static List<Processor> processors;
+    private static Scheduler scheduler;
 
     private Simulator(){
         initializeEnvironment();
-//        try{
-//            File file = new File("./input.txt");
-//            scanner = new Scanner(file);
-//
-//            while(scanner.hasNextLine()){
-//                System.out.println(scanner.nextLine());
-//            }
-//
-//            scanner.close();
-//        } catch(Exception e){
-//            System.out.println("File does not exist!");
-//        }
-
-        File file = new File("Process_Execution/Simulation/src/input.txt");
-
-        try (Scanner scanner = new Scanner(file)) { // Try-with-resources ensures automatic closing
-            while (scanner.hasNextLine()) {
-                System.out.println(scanner.nextLine());
-            }
-        } catch (Exception e) {
-            System.out.println("File does not exist!");
-        }
     }
 
-    public static synchronized Simulator getInstance(){
+    public static synchronized Simulator getSimulator(){
         if(simulatorInstance == null){
             simulatorInstance = new Simulator();
         }
@@ -38,21 +22,51 @@ public class Simulator {
         return simulatorInstance;
     }
 
-    public void initializeEnvironment(){
+    public void setFilePath(String filePath){
+        Simulator.filePath = filePath;
+    }
+
+    public String getFilePath(){
+        return filePath;
+    }
+
+    public Scheduler getScheduler(){
+        return Scheduler.getScheduler();
+    }
+
+    public void initializeProcessors(){
+        Scanner scanner = new Scanner(System.in);
+        processors = new ArrayList<Processor>();
+        System.out.println("Enter number of processors: ");
+        int numberOfProcessors = scanner.nextInt();
+        while(numberOfProcessors < 1){
+            System.out.println("Invalid number of processors, Enter a number greater than zero: ");
+            numberOfProcessors = scanner.nextInt();
+        }
+        for(int i = 1; i <= numberOfProcessors; i++){
+            processors.add(new Processor(i));
+        }
+        scanner.close();
+    }
+
+    public void initializeTasks(){
+        tasks = new ArrayList<Task>();
         try{
-            Scanner scanner1 = new Scanner(System.in);
-            String filePath = scanner1.nextLine();
-            File file = new File(filePath);
-            Scanner scanner2 = new Scanner(file);
-
-            while(scanner2.hasNextLine()){
-
+            Scanner fileScanner = new Scanner(new File(filePath));
+            int lines = fileScanner.nextInt();
+            for(int i = 0; i < lines; i++){
+                tasks.add(new Task((i+1), fileScanner.nextInt(), fileScanner.nextInt(), fileScanner.nextInt()));
             }
 
-            scanner1.close();
-            scanner2.close();
-        } catch (Exception e) {
+            fileScanner.close();
+        } catch(Exception e){
             System.out.println("File does not exist!");
         }
+    }
+
+    public void initializeEnvironment(){
+        initializeProcessors();
+        initializeTasks();
+        scheduler = Scheduler.getScheduler();
     }
 }
