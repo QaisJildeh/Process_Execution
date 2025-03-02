@@ -1,5 +1,6 @@
 import java.io.File;
 import java.util.ArrayList;
+import java.util.Comparator;
 import java.util.List;
 import java.util.Scanner;
 
@@ -9,10 +10,12 @@ public class Simulator {
     private static List<Task> tasks;
     private static List<Processor> processors;
     private static Scheduler scheduler;
-    private static Clock clock;
+    // private static Clock clock;
 
     private Simulator(){
         initializeEnvironment();
+        sortTaskPriority();
+        initializeScheduler();
     }
 
     public static synchronized Simulator getSimulator(){
@@ -65,18 +68,29 @@ public class Simulator {
         }
     }
 
+    public static void initializeScheduler(){
+        Scheduler.setTasks(tasks);
+        Scheduler.setProcessors(processors);
+    }
+
     public static void initializeEnvironment(){
         initializeProcessors();
         initializeTasks();
         scheduler = Scheduler.getScheduler();
     }
 
-    @Override
-    public String toString(){
-        return "This is the simulator class";
+    public static void sortTaskPriority(){
+        tasks.sort(Comparator.comparing(Task::getCreationTime).reversed()
+                .thenComparing(Task::getPriority)
+                .thenComparing(Task::getExecutionTime));
     }
 
     public static void run(){
+        
+    }
 
+    @Override
+    public String toString(){
+        return "This is the simulator class";
     }
 }

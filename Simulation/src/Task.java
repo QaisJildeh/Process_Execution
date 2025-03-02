@@ -11,6 +11,13 @@ public class Task {
         this.priority = priority;
     }
 
+    public Task(Task task){
+        this.id = task.id;
+        this.creationTime = task.creationTime;
+        setExecutionTime(task.executionTime);
+        this.priority = task.priority;
+    }
+
     public void setExecutionTime(int executionTime){
         this.executionTime = executionTime;
     }

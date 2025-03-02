@@ -1,9 +1,8 @@
 import java.util.ArrayList;
-import java.util.Comparator;
 import java.util.List;
 
 public class Scheduler {
-    private static Scheduler signletonScheduler;
+    private static Scheduler schedulerInstance;
     private static List<Processor> processors;
     private static List<Task> tasks;
 
@@ -13,25 +12,31 @@ public class Scheduler {
     }
 
     public static synchronized Scheduler getScheduler(){
-        if(signletonScheduler == null){
-            signletonScheduler = new Scheduler();
+        if(schedulerInstance == null){
+            schedulerInstance = new Scheduler();
         }
 
-        return signletonScheduler;
+        return schedulerInstance;
     }
 
-    public void setTasks(List<Task> tasks){
+    public static void setTasks(List<Task> tasks){
         Scheduler.tasks.addAll(tasks);
     }
 
-    public void setProcessors(List<Processor> processors){
+    public static void setProcessors(List<Processor> processors){
         Scheduler.processors.addAll(processors);
     }
 
-    public void sortTaskPriority(){
-        tasks.sort(Comparator.comparing(Task::getCreationTime).reversed()
-                .thenComparing(Task::getPriority)
-                .thenComparing(Task::getExecutionTime));
+    public static void assignJob(){
+        for(Processor pr : processors){
+            if(tasks.isEmpty()){
+                break;
+            }
+            if(pr.isAvailable()){
+                pr.assignTask(tasks.removeLast());
+                pr.setAvailability(false);
+            }
+        }
     }
 
     @Override
