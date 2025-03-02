@@ -54,8 +54,8 @@ public class Simulator {
         try{
             Scanner fileScanner = new Scanner(new File(filePath));
             int lines = fileScanner.nextInt();
-            for(int i = 0; i < lines; i++){
-                tasks.add(new Task((i+1), fileScanner.nextInt(), fileScanner.nextInt(), fileScanner.nextInt()));
+            for(int i = 1; i <= lines; i++){
+                tasks.add(new Task(i, fileScanner.nextInt(), fileScanner.nextInt(), fileScanner.nextInt()));
             }
 
             fileScanner.close();
