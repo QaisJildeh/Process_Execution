@@ -1,6 +1,7 @@
 public class Processor {
     private final int id;
     private boolean availability;
+    private Task task;
 
     public Processor(int id){
         this.id = id;
@@ -17,5 +18,23 @@ public class Processor {
 
     public boolean isAvailable(){
         return availability;
+    }
+
+    @Override
+    public String toString(){
+        return "Processor " + id + " Availability: " + availability;
+    }
+
+    @Override
+    public boolean equals(Object obj){
+        if(this == obj) {return true;}
+        if(obj == null || getClass() != obj.getClass()) {return false;}
+        Processor microProcessor = (Processor) obj;
+        return id == microProcessor.getID();
+    }
+
+    @Override
+    public int hashCode(){
+        return ((Integer) id).hashCode();
     }
 }

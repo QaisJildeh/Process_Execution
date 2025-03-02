@@ -9,6 +9,7 @@ public class Simulator {
     private static List<Task> tasks;
     private static List<Processor> processors;
     private static Scheduler scheduler;
+    private static Clock clock;
 
     private Simulator(){
         initializeEnvironment();
@@ -22,19 +23,19 @@ public class Simulator {
         return simulatorInstance;
     }
 
-    public void setFilePath(String filePath){
+    public static void setFilePath(String filePath){
         Simulator.filePath = filePath;
     }
 
-    public String getFilePath(){
+    public static String getFilePath(){
         return filePath;
     }
 
-    public Scheduler getScheduler(){
+    public static Scheduler getScheduler(){
         return Scheduler.getScheduler();
     }
 
-    public void initializeProcessors(){
+    public static void initializeProcessors(){
         Scanner scanner = new Scanner(System.in);
         processors = new ArrayList<Processor>();
         System.out.println("Enter number of processors: ");
@@ -49,7 +50,7 @@ public class Simulator {
         scanner.close();
     }
 
-    public void initializeTasks(){
+    public static void initializeTasks(){
         tasks = new ArrayList<Task>();
         try{
             Scanner fileScanner = new Scanner(new File(filePath));
@@ -64,9 +65,18 @@ public class Simulator {
         }
     }
 
-    public void initializeEnvironment(){
+    public static void initializeEnvironment(){
         initializeProcessors();
         initializeTasks();
         scheduler = Scheduler.getScheduler();
+    }
+
+    @Override
+    public String toString(){
+        return "This is the simulator class";
+    }
+
+    public static void run(){
+
     }
 }
