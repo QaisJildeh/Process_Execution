@@ -81,8 +81,6 @@ public class Simulator {
 
     public static void run(){
         while(!scheduler.isDone()){
-            System.out.println("-----------------------------------------");
-            System.out.println("Clock #" + clock.getCurrentClockCycle());
             scheduler.sortTaskPriority();
             scheduler.assignJob();
             for(Processor p : processors){
