@@ -83,7 +83,6 @@ public class Simulator {
         while(!scheduler.isDone()){
             System.out.println("-----------------------------------------");
             System.out.println("Clock #" + clock.getCurrentClockCycle());
-
             scheduler.sortTaskPriority();
             scheduler.assignJob();
             for(Processor p : processors){
@@ -92,10 +91,8 @@ public class Simulator {
 
             clock.tick();
 //            System.out.println(scheduler.isDone());
-
         }
-
-//        System.out.println("Total Clock Cycles = " + clock.getCurrentClockCycle());
+        System.out.println("Total Clock Cycles = " + clock.getCurrentClockCycle());
     }
 
     @Override

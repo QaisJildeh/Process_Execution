@@ -35,15 +35,18 @@ public class Processor {
     }
 
     public void workOnTask(){
-//        System.out.println(this.toString());
-//        System.out.println("[1] Inital Clock = " + initialClock + " Total Clock Cycle = " + clock.getCurrentClockCycle());
-//        System.out.println("Difference = " + (clock.getCurrentClockCycle() - initialClock));
+        System.out.println(this.toString());
+        System.out.println("[1] Inital Clock = " + initialClock + " Total Clock Cycle = " + clock.getCurrentClockCycle());
+        System.out.println("Difference = " + (clock.getCurrentClockCycle() - initialClock));
 
         if(isAvailable()){
             initialClock = clock.getCurrentClockCycle();
+        }
+
+        if(isAvailable() && task != null){
             setAvailability(false);
-//            System.out.println("[2] Inital Clock = " + initialClock + " Total Clock Cycle = " + clock.getCurrentClockCycle());
-//            System.out.println("Difference = " + (clock.getCurrentClockCycle() - initialClock));
+            System.out.println("[2] Inital Clock = " + initialClock + " Total Clock Cycle = " + clock.getCurrentClockCycle());
+            System.out.println("Difference = " + (clock.getCurrentClockCycle() - initialClock));
         }
 
         if(task != null && clock.getCurrentClockCycle() - initialClock >= task.getExecutionTime()){
@@ -52,8 +55,8 @@ public class Processor {
             task = null;
             availability = true;
             initialClock = clock.getCurrentClockCycle();
-//            System.out.println("[3] Inital Clock = " + initialClock + " Total Clock Cycle = " + clock.getCurrentClockCycle());
-//            System.out.println("Difference = " + (clock.getCurrentClockCycle() - initialClock));
+            System.out.println("[3] Inital Clock = " + initialClock + " Total Clock Cycle = " + clock.getCurrentClockCycle());
+            System.out.println("Difference = " + (clock.getCurrentClockCycle() - initialClock));
         }
 
     }

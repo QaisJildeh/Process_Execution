@@ -58,11 +58,9 @@ public class Scheduler {
 
     public void sortTaskPriority(){
         updateTasksRelativeTime();
-
         tasks.sort(Comparator.comparing(Task::getCreationRelativeToClock).reversed()
                 .thenComparing(Task::getPriority)
                 .thenComparing(Task::getExecutionTime));
-
     }
 
     public void updateTasksRelativeTime(){

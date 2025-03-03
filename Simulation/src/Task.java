@@ -21,10 +21,6 @@ public class Task {
         this.creationRelativeToClock = task.creationRelativeToClock;
     }
 
-//    public void setExecutionTime(int executionTime){
-//        this.executionTime = executionTime;
-//    }
-
     public void setCreationRelativeToClock(int time){
         this.creationRelativeToClock = time;
     }
