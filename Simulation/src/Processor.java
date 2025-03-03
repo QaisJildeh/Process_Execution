@@ -1,15 +1,20 @@
+import java.util.ArrayList;
+import java.util.List;
+
 public class Processor {
     private final int id;
     private boolean availability;
     private Task task;
     private Clock clock;
-
+    private List<Task> finishedTasks;
     private int initialClock;
 
     public Processor(int id){
         this.id = id;
         availability = true;
-        clock = new Clock();
+        clock = Clock.getInstance();
+        finishedTasks = new ArrayList<Task>();
+        initialClock = 0;
     }
 
     void setAvailability(boolean availability){
@@ -25,25 +30,32 @@ public class Processor {
     }
 
     public void assignTask(Task task){
+        setAvailability(false);
         this.task = task;
     }
 
     public void workOnTask(){
-        try{
-            if(isAvailable()){
-                initialClock = clock.getCurrentClockCycle();
-            }
+//        System.out.println(this.toString());
+//        System.out.println("[1] Inital Clock = " + initialClock + " Total Clock Cycle = " + clock.getCurrentClockCycle());
+//        System.out.println("Difference = " + (clock.getCurrentClockCycle() - initialClock));
 
-            if(clock.getCurrentClockCycle() - initialClock < task.getExecutionTime()){
-                clock.tick();
-            }
-            else if(clock.getCurrentClockCycle() - initialClock == task.getExecutionTime()){
-                task = null;
-                setAvailability(true);
-            }
-        } catch(Exception e){
-            System.out.println("Trying to work on task that does not exist is invalid!!");
+        if(isAvailable()){
+            initialClock = clock.getCurrentClockCycle();
+            setAvailability(false);
+//            System.out.println("[2] Inital Clock = " + initialClock + " Total Clock Cycle = " + clock.getCurrentClockCycle());
+//            System.out.println("Difference = " + (clock.getCurrentClockCycle() - initialClock));
         }
+
+        if(task != null && clock.getCurrentClockCycle() - initialClock >= task.getExecutionTime()){
+            finishedTasks.add(task);
+            System.out.println("FINISHED: " + task.toString());
+            task = null;
+            availability = true;
+            initialClock = clock.getCurrentClockCycle();
+//            System.out.println("[3] Inital Clock = " + initialClock + " Total Clock Cycle = " + clock.getCurrentClockCycle());
+//            System.out.println("Difference = " + (clock.getCurrentClockCycle() - initialClock));
+        }
+
     }
 
     @Override

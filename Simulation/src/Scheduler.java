@@ -1,14 +1,17 @@
 import java.util.ArrayList;
+import java.util.Comparator;
 import java.util.List;
 
 public class Scheduler {
     private static Scheduler schedulerInstance;
     private static List<Processor> processors;
     private static List<Task> tasks;
+    private static Clock clock;
 
     private Scheduler(){
         processors = new ArrayList<Processor>();
         tasks = new ArrayList<Task>();
+        clock = Clock.getInstance();
     }
 
     public static synchronized Scheduler getScheduler(){
@@ -19,22 +22,53 @@ public class Scheduler {
         return schedulerInstance;
     }
 
-    public static void setTasks(List<Task> tasks){
+    public void setTasks(List<Task> tasks){
         Scheduler.tasks.addAll(tasks);
     }
 
-    public static void setProcessors(List<Processor> processors){
+    public void setProcessors(List<Processor> processors){
         Scheduler.processors.addAll(processors);
     }
 
-    public static void assignJob(){
+    public void assignJob(){
+        if(tasks.isEmpty()) {return;}
+        Task t = null;
         for(Processor pr : processors){
-            if(tasks.isEmpty()){
+            if(pr.isAvailable() && !tasks.isEmpty()){
+                if(clock.getCurrentClockCycle() < tasks.getLast().getCreationTime()) {return;}
+                t= tasks.removeLast();
+                pr.assignTask(t);
+                System.out.println("Assigned " + t.toString() + " to " + pr.toString());
+            }
+        }
+    }
+
+    public boolean isDone(){
+        boolean tasksDone = tasks.isEmpty();
+        boolean processorsAvailable = true;
+        for(Processor pr : processors){
+            if(!pr.isAvailable()){
+                processorsAvailable = false;
                 break;
             }
-            if(pr.isAvailable()){
-                pr.assignTask(tasks.removeLast());
-                pr.setAvailability(false);
+        }
+
+        return tasksDone && processorsAvailable;
+    }
+
+    public void sortTaskPriority(){
+        updateTasksRelativeTime();
+
+        tasks.sort(Comparator.comparing(Task::getCreationRelativeToClock).reversed()
+                .thenComparing(Task::getPriority)
+                .thenComparing(Task::getExecutionTime));
+
+    }
+
+    public void updateTasksRelativeTime(){
+        for(Task t : tasks){
+            if(t.getCreationTime() <= clock.getCurrentClockCycle()){
+                t.setCreationRelativeToClock(0);
             }
         }
     }

@@ -10,12 +10,10 @@ public class Simulator {
     private static List<Task> tasks;
     private static List<Processor> processors;
     private static Scheduler scheduler;
-    // private static Clock clock;
+    private static Clock clock;
 
     private Simulator(){
         initializeEnvironment();
-        sortTaskPriority();
-        initializeScheduler();
     }
 
     public static synchronized Simulator getSimulator(){
@@ -69,24 +67,35 @@ public class Simulator {
     }
 
     public static void initializeScheduler(){
-        Scheduler.setTasks(tasks);
-        Scheduler.setProcessors(processors);
+        scheduler = Scheduler.getScheduler();
+        scheduler.setTasks(tasks);
+        scheduler.setProcessors(processors);
     }
 
     public static void initializeEnvironment(){
         initializeProcessors();
         initializeTasks();
-        scheduler = Scheduler.getScheduler();
-    }
-
-    public static void sortTaskPriority(){
-        tasks.sort(Comparator.comparing(Task::getCreationTime).reversed()
-                .thenComparing(Task::getPriority)
-                .thenComparing(Task::getExecutionTime));
+        initializeScheduler();
+        clock = Clock.getInstance();
     }
 
     public static void run(){
-        
+        while(!scheduler.isDone()){
+            System.out.println("-----------------------------------------");
+            System.out.println("Clock #" + clock.getCurrentClockCycle());
+
+            scheduler.sortTaskPriority();
+            scheduler.assignJob();
+            for(Processor p : processors){
+                p.workOnTask();
+            }
+
+            clock.tick();
+//            System.out.println(scheduler.isDone());
+
+        }
+
+//        System.out.println("Total Clock Cycles = " + clock.getCurrentClockCycle());
     }
 
     @Override

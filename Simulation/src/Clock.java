@@ -1,8 +1,17 @@
 public class Clock {
-    private int currentClockCycle;
+    private static Clock singletonClock;
+    private static int currentClockCycle;
 
-    public Clock(){
-        currentClockCycle = 0;
+    private Clock(){
+        currentClockCycle = 1;
+    }
+
+    public static synchronized Clock getInstance(){
+        if(singletonClock == null){
+            singletonClock = new Clock();
+        }
+
+        return singletonClock;
     }
 
     public void tick(){

@@ -1,25 +1,32 @@
 public class Task {
     private final int id;
     private final int creationTime;
-    private int executionTime;
+    private final int executionTime;
     private final int priority;
+    private int creationRelativeToClock;
 
     public Task(int id, int creationTime, int executionTime, int priority){
         this.id = id;
         this.creationTime = creationTime;
-        setExecutionTime(executionTime);
+        this.executionTime = executionTime;
         this.priority = priority;
+        creationRelativeToClock = creationTime;
     }
 
     public Task(Task task){
         this.id = task.id;
         this.creationTime = task.creationTime;
-        setExecutionTime(task.executionTime);
+        this.executionTime = task.executionTime;
         this.priority = task.priority;
+        this.creationRelativeToClock = task.creationRelativeToClock;
     }
 
-    public void setExecutionTime(int executionTime){
-        this.executionTime = executionTime;
+//    public void setExecutionTime(int executionTime){
+//        this.executionTime = executionTime;
+//    }
+
+    public void setCreationRelativeToClock(int time){
+        this.creationRelativeToClock = time;
     }
 
     public int getID(){
@@ -38,9 +45,13 @@ public class Task {
         return priority;
     }
 
+    public int getCreationRelativeToClock(){
+        return creationRelativeToClock;
+    }
+
     @Override
     public String toString(){
-        return "Task " + id + ": {" + creationTime + ", " + executionTime + ", " + priority + "}";
+        return "Task " + id + ": {" + creationTime + "(" + creationRelativeToClock + "), " + executionTime + ", " + priority + "}";
     }
 
     @Override
