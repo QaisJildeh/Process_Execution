@@ -32,13 +32,10 @@ public class Scheduler {
 
     public void assignJob(){
         if(tasks.isEmpty()) {return;}
-        Task t = null;
         for(Processor pr : processors){
             if(pr.isAvailable() && !tasks.isEmpty()){
                 if(clock.getCurrentClockCycle() < tasks.getLast().getCreationTime()) {return;}
-                t= tasks.removeLast();
-                pr.assignTask(t);
-                System.out.println("Assigned " + t.toString() + " to " + pr.toString());
+                pr.assignTask(tasks.removeLast());
             }
         }
     }

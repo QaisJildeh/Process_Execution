@@ -1,8 +1,5 @@
 import java.io.File;
-import java.util.ArrayList;
-import java.util.Comparator;
-import java.util.List;
-import java.util.Scanner;
+import java.util.*;
 
 public class Simulator {
     private static Simulator simulatorInstance;
@@ -88,9 +85,7 @@ public class Simulator {
             }
 
             clock.tick();
-//            System.out.println(scheduler.isDone());
         }
-        System.out.println("Total Clock Cycles = " + clock.getCurrentClockCycle());
     }
 
     @Override

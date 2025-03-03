@@ -7,6 +7,8 @@ public class Processor {
     private Task task;
     private Clock clock;
     private List<Task> finishedTasks;
+    private List<Integer> startingClock;
+    private List<Integer> endingClock;
     private int initialClock;
 
     public Processor(int id){
@@ -14,6 +16,8 @@ public class Processor {
         availability = true;
         clock = Clock.getInstance();
         finishedTasks = new ArrayList<Task>();
+        startingClock = new ArrayList<Integer>();
+        endingClock = new ArrayList<Integer>();
         initialClock = 0;
     }
 
@@ -27,6 +31,18 @@ public class Processor {
 
     public boolean isAvailable(){
         return availability;
+    }
+
+    public List<Task> getFinishedTasks(){
+        return finishedTasks;
+    }
+
+    public List<Integer> getStartingClock(){
+        return startingClock;
+    }
+
+    public List<Integer> getEndingClock(){
+        return endingClock;
     }
 
     public void assignTask(Task task){
@@ -45,12 +61,12 @@ public class Processor {
 
         if(task != null && clock.getCurrentClockCycle() - initialClock >= task.getExecutionTime()){
             finishedTasks.add(task);
-            System.out.println("FINISHED: " + task.toString());
+            startingClock.add(initialClock);
+            endingClock.add(clock.getCurrentClockCycle());
             task = null;
             availability = true;
             initialClock = clock.getCurrentClockCycle();
         }
-
     }
 
     @Override
