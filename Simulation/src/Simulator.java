@@ -88,6 +88,57 @@ public class Simulator {
         }
     }
 
+    public static void printReport(){
+        int totalSimulationTime = 0;
+        for(Processor p : processors){
+            for(int end : p.getEndingClock()){
+                if(end > totalSimulationTime){
+                    totalSimulationTime = end;
+                }
+            }
+        }
+
+        if(totalSimulationTime == 0){
+            totalSimulationTime = Clock.getInstance().getCurrentClockCycle() - 1;
+        }
+
+        System.out.println("Simulation Report");
+        System.out.println("Total Simulation Time: " + totalSimulationTime + " cycles");
+        System.out.println("----------------------------------------");
+
+        for(Processor processor : processors){
+            System.out.println("Processor " + processor.getID() + ":");
+            List<Task> tasks = processor.getFinishedTasks();
+            List<Integer> starts = processor.getStartingClock();
+            List<Integer> ends = processor.getEndingClock();
+
+            if(tasks.isEmpty()){
+                System.out.println("  No tasks executed.");
+            }
+            else{
+                System.out.println("  Tasks Executed:");
+                for(int i = 0; i < tasks.size(); i++){
+                    Task task = tasks.get(i);
+                    int start = starts.get(i);
+                    int end = ends.get(i);
+                    System.out.println("    Task " + task.getID() + ": Start=" + start + ", End=" + end + " (Duration=" + (end - start) + ")");
+                }
+            }
+
+            int busyTime = 0;
+            for(int i = 0; i < ends.size(); i++){
+                busyTime += ends.get(i) - starts.get(i);
+            }
+
+            int idleTime = totalSimulationTime - busyTime;
+            double utilization = (busyTime/(double) totalSimulationTime) * 100;
+
+            System.out.println("  Total Busy Time: " + busyTime + " cycles");
+            System.out.println("  Total Idle Time: " + idleTime + " cycles");
+            System.out.println("  Utilization: " + String.format("%.2f", utilization) + "%\n");
+        }
+    }
+
     @Override
     public String toString(){
         return "This is the simulator class";
