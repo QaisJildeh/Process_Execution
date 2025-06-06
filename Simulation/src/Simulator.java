@@ -3,7 +3,7 @@ import java.util.*;
 
 public class Simulator {
     private static Simulator simulatorInstance;
-    private static String filePath = "C:\\Users\\jilde\\Desktop\\Atypon\\Tasks\\Process_Execution_Task\\Process_Execution\\input.txt";
+    private static String filePath = "input.txt";
     private static List<Task> tasks;
     private static List<Processor> processors;
     private static Scheduler scheduler;
